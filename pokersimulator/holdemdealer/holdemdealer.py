@@ -90,6 +90,7 @@ class HoldemDealer:
 
         for seat in self.__table.seats:
             seat['current_bet'] = 0
+            seat['status'] = None
             if with_blinds:
                 if seat['small']:
                     seat['current_bet'] = seat['player'].take_money(self.__small)
@@ -163,7 +164,7 @@ class HoldemDealer:
         return len(self.__table.seats) > 2
 
     def __play_preflop(self):
-        return self.__play_stage(0, self.__play_flop)
+        return self.__play_stage(0, self.__play_flop, True)
     
     def __play_flop(self):
         return self.__play_stage(3, self.__play_turn)
@@ -174,11 +175,11 @@ class HoldemDealer:
     def __play_river(self):
         return self.__play_stage(1, self.__showdown)
 
-    def __play_stage(self, draw_amount, next_stage):
+    def __play_stage(self, draw_amount, next_stage, with_blinds=False):
         for _ in range(draw_amount):
             self.__table.community_cards.append(self.__deck.draw())
             
-        self.__start_betting(True)
+        self.__start_betting(with_blinds)
         if self.__inplay_count < 2:
             return self.__showdown()
         
