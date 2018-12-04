@@ -140,6 +140,9 @@ class HoldemDealer:
         results = self.__deck.compute_winner(compiting_hands, self.__table.community_cards)
         winnings = [0] * len(self.__table.seats)
 
+        for seat in self.__table.seats:
+            seat['current_bet'] = seat['total_bet']
+
         for result in results:
             pots = []
             result.sort(key=self.total_bet_order)
@@ -147,17 +150,17 @@ class HoldemDealer:
                 pot = 0
                 winner_seat = self.__table.seats[winner_index]
                 for seat in self.__table.seats:
-                    seat_pay = min(winner_seat['total_bet'], seat['total_bet'])
-                    seat['total_bet'] -= seat_pay
-                    pot += min(winner_seat['total_bet'], seat['total_bet'])
+                    seat_pay = min(winner_seat['current_bet'], seat['current_bet'])
+                    pot += seat_pay
+                    seat['current_bet'] -= seat_pay
                 pots.append(pot)
             for result_index in range(len(result)):
                 for pot_index in range(result_index + 1):
                     winnings[result[result_index]] += pots[pot_index] / (len(pots) - pot_index)
         
         for win_index in range(len(winnings)):
-            self.__table.seats[win_index]['player'].finish_round(self.__table, 
-                self.__players_cards[win_index], winnings[win_index], revealed_cards)
+            self.__table.seats[win_index]['player'].finish_round(self.__table, win_index,
+                self.__players_cards[win_index], winnings, revealed_cards)
 
         self.__table.seats = [seat for seat in self.__table.seats if seat['player'].has_money()]
 

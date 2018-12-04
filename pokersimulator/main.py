@@ -1,12 +1,12 @@
 
 from pokertable.pokertable import *
-from pokerinputplayer.pokerinputplayer import *
-from pokerdeck.pockerdeck import *
+from pockerplayer.dummyplayer import *
+from pokerdeck.dummydeck import *
 from holdemdealer.holdemdealer import *
 
-players = [PokerInputPlayer(1000, 'A'), PokerInputPlayer(1000, 'B'), PokerInputPlayer(1000, 'C')]
+players = [PokerDummyPlayer(1000, 'A'), PokerDummyPlayer(1000, 'B'), PokerDummyPlayer(1000, 'C')]
 table = PokerTable(players)
-deck = PokerDeck()
+deck = DummyDeck()
 dealer = HoldemDealer(table, deck, 25, 50)
 
 dealer.init_game()

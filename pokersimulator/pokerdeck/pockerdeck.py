@@ -35,7 +35,7 @@ class PokerDeck:
                 score = self.__compute_best_score(hand, community_cards)
             hand_scores[idx] = (score, idx)
 
-        hand_scores.sort(key=self.__score_map)
+        hand_scores.sort(key=self.__score_map, reverse=True)
 
         result = [[hand_scores[0][1]]]
         for i in range(1, len(hand_scores)):
@@ -50,7 +50,7 @@ class PokerDeck:
         all_cards = hand + community_cards
         max_score = -1
         for i in range(len(all_cards)):
-            for j in range(i, len(all_cards)):
+            for j in range(i + 1, len(all_cards)):
                 cur_score = self.__compute_score([all_cards[k] for k in range(len(all_cards)) if k not in (i, j)])
                 if cur_score > max_score:
                     max_score = cur_score
@@ -62,13 +62,13 @@ class PokerDeck:
 
         same_suit = True
         is_streight = True
-        pairs = [0] * len(hand)
+        pairs = [False] * len(hand)
         pairs_count = 0
 
         for card_index in range(1, len(hand)):
             same_suit = same_suit and hand[card_index]['suit'] == hand[card_index - 1]['suit']
             is_streight = is_streight and hand[card_index]['rank'] - 1 == hand[card_index - 1]['rank']
-            if hand[card_index]['rank'] == hand[card_index - 1]:
+            if hand[card_index]['rank'] == hand[card_index - 1]['rank']:
                 pairs[card_index - 1] = True
                 pairs_count += 1
         
