@@ -2,7 +2,6 @@
 class PokerTable:
     def __init__(self, players):
         self._players = players
-
         self.reset()
     
     def reset(self):
@@ -18,11 +17,3 @@ class PokerTable:
                 'small': False,
                 'big': False
             })
-    
-    def print(self):
-        print('----------------------------------')
-        print(f'community cards: {self.community_cards}')
-        print('players:')
-        for i in range(len(self.seats)):
-            print(f'    [{i}] {self.seats[i]}')
-        print('----------------------------------')

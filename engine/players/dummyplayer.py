@@ -29,24 +29,11 @@ class PokerDummyPlayer:
             action = { 'type': 'check', 'bet': 0 }
         elif my_seat['current_bet'] < max_bet:
             action = { 'type': 'call', 'bet': min(self.__money, max_bet - my_seat['current_bet']) }
-        
-        input('prest to continue')
-        os.system('clear')
-        print(f'player {self.__name}')
-        print(f'money: {self.__money}, cards: {cards}')
-        table.print()
-        print(f'action: {action}')
-        print('\n')
 
         return action
 
     def finish_round(self, table, seat_index, cards, wins, revealed_cards):
         self.__money += wins[seat_index]
-
-        print(f'player {self.__name}, seat {seat_index}')
-        print(f'money: {self.__money}\ncards: {cards}\nwins: {wins}\nother cards: {revealed_cards}')
-        table.print()
-        print('\n')
 
     def __str__(self):
         return self.__name

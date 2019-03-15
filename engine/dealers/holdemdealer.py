@@ -1,11 +1,20 @@
 
 class HoldemDealer:
-    def __init__(self, table, deck, small, big, event_notifier):
+    def __init__(self, table, deck, small, big, events_handler):
         self.__table = table
         self.__deck = deck
         self.__small = small
         self.__big = big
-        self.__event_notifier = event_notifier
+        self.__events_handler = events_handler
+
+    def __event_notify(self, event_type, action = None, action_seat = None):
+        self.__events_handler(event_type, {
+            'community_cards': self.__table.community_cards,
+            'players': self.__table.seats,
+            'cards': self.__players_cards,
+            'action': action,
+            'action_seat': action_seat
+        })
 
     def init_game(self):
         self.__table.reset()
@@ -34,7 +43,7 @@ class HoldemDealer:
         self.__next_button()
         self.__deal_cards()
 
-        self.__event_notifier('start_round')
+        self.__event_notify('start_round')
 
         return self.__play_preflop()
 
@@ -86,7 +95,7 @@ class HoldemDealer:
         if action['type'] == 'fold':
             self.__inplay_count -= 1
 
-        self.__event_notifier('action')
+        self.__event_notify('action', action, seat)
 
         return True
 
@@ -168,7 +177,7 @@ class HoldemDealer:
 
         self.__table.seats = [seat for seat in self.__table.seats if seat['player'].has_money()]
 
-        self.__event_notifier('end_round')
+        self.__event_notify('end_round')
 
         return len(self.__table.seats) > 2
 
@@ -187,7 +196,10 @@ class HoldemDealer:
     def __play_stage(self, draw_amount, next_stage, with_blinds=False):
         for _ in range(draw_amount):
             self.__table.community_cards.append(self.__deck.draw())
-            
+        
+        if (draw_amount > 0):
+            self.__event_notify('table_cards_updated')
+
         self.__start_betting(with_blinds)
         if self.__inplay_count < 2:
             return self.__showdown()

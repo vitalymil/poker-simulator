@@ -5,16 +5,40 @@ class SimplePokerConsole:
     def events_handler(self, event_type, event_data):
         os.system('clear')
 
+        self.__print_status(event_type, event_data)
+        self.__print_table(event_data)
+        self.__print_players(event_data)
+
         input('prest enter to continue')
 
+    def __print_status(self, event_type, event_data):
+        if event_type == 'start_round':
+            print('Round stating')
+        elif event_type == 'action':
+            player = event_data["action_seat"]["player"]
+            action_type = event_data["action"]["type"]
+            action_bet = event_data["action"]["bet"]
+            print(f'Player {player} made action: {action_type} {action_bet if action_bet > 0 else ""}')
+        elif event_type == 'table_cards_updated':
+            print('Table cards updated')
+
     def __print_players(self, event_data):
-        
+        for player_idx in range(len(event_data["players"])):
+            player = event_data["players"][player_idx]
+            cards = event_data["cards"][player_idx]
+
+            print(f'Player {player["player"]} {"(button)" if player["button"] else ""}')
+            print(f'bet: {player["current_bet"] + player["total_bet"]}')
+            print(f'status: {player["status"]}')
+            print(f'cards: {self.__card_to_str(cards[0])}, {self.__card_to_str(cards[1])}')
+            print('-------------')
+
     def __print_table(self, event_data):
         print('----------------------------------')
 
-        if len(event_data.community_cards):
+        if len(event_data['community_cards']) > 0:
             community_cards_str = ''
-            for community_card in event_data.community_cards:
+            for community_card in event_data['community_cards']:
                 community_cards_str = community_cards_str + self.__card_to_str(community_card) + ', '
             print(community_cards_str[:-2])
         else:
