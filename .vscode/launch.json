@@ -8,15 +8,21 @@
             "name": "Python: Current File (Integrated Terminal)",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/pokersimulator/main.py",
+            "program": "${file}",
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Attach",
+            "name": "Python: Remote Attach",
             "type": "python",
             "request": "attach",
             "port": 5678,
-            "host": "localhost"
+            "host": "localhost",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}",
+                    "remoteRoot": "."
+                }
+            ]
         },
         {
             "name": "Python: Module",

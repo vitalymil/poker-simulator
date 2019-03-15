@@ -1,4 +1,4 @@
-from .pockerdeck import *
+from engine.decks.pokerdeck import PokerDeck
 
 class DummyDeck(PokerDeck):
     def __init__(self):

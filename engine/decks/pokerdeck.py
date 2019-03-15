@@ -104,12 +104,10 @@ class PokerDeck:
                 )
             ):
             return self.__trips_score(hand, pairs)
-        elif (pairs_count == 2 and 
-                (
-                    (pairs[0] and pairs[2]) or
-                    (pairs[1] and pairs[3])
-                )
-            ):
+        elif (pairs_count == 2 and (
+                (pairs[0] and pairs[2]) or
+                (pairs[1] and pairs[3])
+                )):
             return self.__two_pairs_score(hand, pairs)
         elif pairs_count == 1:
             return self.__pair_score(hand, pairs)
