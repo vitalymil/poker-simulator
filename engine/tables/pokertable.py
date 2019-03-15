@@ -20,9 +20,9 @@ class PokerTable:
             })
     
     def print(self):
-        print('----------------------------------\n')
+        print('----------------------------------')
         print(f'community cards: {self.community_cards}')
         print('players:')
         for i in range(len(self.seats)):
             print(f'    [{i}] {self.seats[i]}')
-        print('----------------------------------\n')
+        print('----------------------------------')

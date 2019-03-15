@@ -1,4 +1,6 @@
 
+import os
+
 class PokerDummyPlayer:
     def __init__(self, initial_money, name):
         self.__money = initial_money
@@ -16,11 +18,6 @@ class PokerDummyPlayer:
         return True
     
     def get_action(self, table, cards):
-        print(f'player {self.__name}')
-        print(f'money: {self.__money}, cards: {cards}')
-        table.print()
-        print('\n')
-
         max_bet = 0
         my_seat = None
         for seat in table.seats:
@@ -29,9 +26,19 @@ class PokerDummyPlayer:
             if seat['status'] != 'fold' and seat['current_bet'] > max_bet:
                 max_bet = seat['current_bet']
         if max_bet == 0 or max_bet == my_seat['current_bet']:
-            return { 'type': 'check', 'bet': 0 }
+            action = { 'type': 'check', 'bet': 0 }
         elif my_seat['current_bet'] < max_bet:
-            return { 'type': 'call', 'bet': min(self.__money, max_bet - my_seat['current_bet']) }
+            action = { 'type': 'call', 'bet': min(self.__money, max_bet - my_seat['current_bet']) }
+        
+        input('prest to continue')
+        os.system('clear')
+        print(f'player {self.__name}')
+        print(f'money: {self.__money}, cards: {cards}')
+        table.print()
+        print(f'action: {action}')
+        print('\n')
+
+        return action
 
     def finish_round(self, table, seat_index, cards, wins, revealed_cards):
         self.__money += wins[seat_index]

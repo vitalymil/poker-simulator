@@ -1,10 +1,11 @@
 
 class HoldemDealer:
-    def __init__(self, table, deck, small, big):
+    def __init__(self, table, deck, small, big, event_notifier):
         self.__table = table
         self.__deck = deck
         self.__small = small
         self.__big = big
+        self.__event_notifier = event_notifier
 
     def init_game(self):
         self.__table.reset()
@@ -32,6 +33,8 @@ class HoldemDealer:
         
         self.__next_button()
         self.__deal_cards()
+
+        self.__event_notifier('start_round')
 
         return self.__play_preflop()
 
@@ -83,6 +86,8 @@ class HoldemDealer:
         if action['type'] == 'fold':
             self.__inplay_count -= 1
 
+        self.__event_notifier('action')
+
         return True
 
     def __start_betting(self, with_blinds):
@@ -123,7 +128,6 @@ class HoldemDealer:
         compiting_hands = [None] * len(self.__table.seats)
         cur_seat_index = (self.__button_index + 1) % len(self.__table.seats)
         
-
         for _ in range(len(self.__table.seats)):
             seat = self.__table.seats[cur_seat_index]
             cur_seat_index = (cur_seat_index + 1) % len(self.__table.seats)
@@ -163,6 +167,8 @@ class HoldemDealer:
                 self.__players_cards[win_index], winnings, revealed_cards)
 
         self.__table.seats = [seat for seat in self.__table.seats if seat['player'].has_money()]
+
+        self.__event_notifier('end_round')
 
         return len(self.__table.seats) > 2
 
