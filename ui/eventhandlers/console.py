@@ -7,7 +7,7 @@ class ConsoleEventHandler:
 
         self.__print_status(event_type, event_data)
         self.__print_table(event_data)
-        self.__print_players(event_data)
+        self.__print_players(event_type, event_data)
 
         input('prest enter to continue')
 
@@ -26,14 +26,19 @@ class ConsoleEventHandler:
             win_size = event_data["action"]["size"]
             print(f'Player {player} won {win_size}')
 
-    def __print_players(self, event_data):
+    def __print_players(self, event_type, event_data):
         for player_idx in range(len(event_data["players"])):
             player = event_data["players"][player_idx]
             cards = event_data["cards"][player_idx]
 
             print(f'Player {player["player"]} {"(button)" if player["button"] else ""}')
             print(f'bank: {player["player"].get_money()}')
-            print(f'bet: {player["current_bet"] + player["total_bet"]}')
+
+            if event_type != 'table_cards_updated':
+                print(f'bet: {player["current_bet"] + player["total_bet"]}')
+            else:
+                print(f'bet: {player["total_bet"]}')
+                
             print(f'status: {player["status"]}')
             print(f'cards: {self.__card_to_str(cards[0])}, {self.__card_to_str(cards[1])}')
             print('-------------')
