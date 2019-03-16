@@ -1,7 +1,7 @@
 
 from engine.holdemengine import HoldemEngine
-from ui.console.simple import SimplePokerConsole
+from ui.console import SimplePokerConsole
 
 ui = SimplePokerConsole()
-engine = HoldemEngine(ui.events_handler)
+engine = HoldemEngine(ui.get_event_hanlder(), ui.get_input_handler())
 engine.start()

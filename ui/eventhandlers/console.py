@@ -1,8 +1,8 @@
 
 import os
 
-class SimplePokerConsole:
-    def events_handler(self, event_type, event_data):
+class ConsoleEventHandler:
+    def event_handler(self, event_type, event_data):
         os.system('clear')
 
         self.__print_status(event_type, event_data)
@@ -21,6 +21,10 @@ class SimplePokerConsole:
             print(f'Player {player} made action: {action_type} {action_bet if action_bet > 0 else ""}')
         elif event_type == 'table_cards_updated':
             print('Table cards updated')
+        elif event_type == 'win_announce':
+            player = event_data["action_seat"]["player"]
+            win_size = event_data["action"]["size"]
+            print(f'Player {player} won {win_size}')
 
     def __print_players(self, event_data):
         for player_idx in range(len(event_data["players"])):
@@ -28,6 +32,7 @@ class SimplePokerConsole:
             cards = event_data["cards"][player_idx]
 
             print(f'Player {player["player"]} {"(button)" if player["button"] else ""}')
+            print(f'bank: {player["player"].get_money()}')
             print(f'bet: {player["current_bet"] + player["total_bet"]}')
             print(f'status: {player["status"]}')
             print(f'cards: {self.__card_to_str(cards[0])}, {self.__card_to_str(cards[1])}')

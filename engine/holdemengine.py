@@ -5,7 +5,7 @@ from engine.players.dummyplayer import PokerDummyPlayer
 from engine.tables.pokertable import PokerTable
 
 class HoldemEngine:
-    def __init__(self, event_notifier):
+    def __init__(self, event_handler, input_handler):
         self._players = [
             PokerDummyPlayer(1000, 'A'), 
             PokerDummyPlayer(1000, 'B'), 
@@ -13,7 +13,7 @@ class HoldemEngine:
         ]
         self._table = PokerTable(self._players)
         self._deck = DummyDeck()
-        self._dealer = HoldemDealer(self._table, self._deck, 25, 50, event_notifier)
+        self._dealer = HoldemDealer(self._table, self._deck, 25, 50, event_handler)
     
     def start(self):
         self._dealer.init_game()

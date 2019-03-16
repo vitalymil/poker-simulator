@@ -174,10 +174,14 @@ class HoldemDealer:
         for win_index in range(len(winnings)):
             self.__table.seats[win_index]['player'].finish_round(self.__table, win_index,
                 self.__players_cards[win_index], winnings, revealed_cards)
+            if winnings[win_index] > 0:
+                self.__event_notify('win_announce', { 
+                    'type': 'win', 
+                    'size': winnings[win_index]
+                }, self.__table.seats[win_index])
+            
 
         self.__table.seats = [seat for seat in self.__table.seats if seat['player'].has_money()]
-
-        self.__event_notify('end_round')
 
         return len(self.__table.seats) > 2
 

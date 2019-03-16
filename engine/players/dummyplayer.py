@@ -6,6 +6,9 @@ class PokerDummyPlayer:
         self.__money = initial_money
         self.__name = name
     
+    def get_money(self):
+        return self.__money
+        
     def has_money(self):
         return self.__money > 0
     

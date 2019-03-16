@@ -1,9 +1,13 @@
 
 class PokerInputPlayer:
-    def __init__(self, initial_money, name):
+    def __init__(self, initial_money, name, input_hanlder):
         self.__money = initial_money
         self.__name = name
+        self.__input_hanlder = input_hanlder
     
+    def get_money(self):
+        return self.__money
+
     def has_money(self):
         return self.__money > 0
     
@@ -13,32 +17,16 @@ class PokerInputPlayer:
         return to_take
     
     def show_cards(self):
-        return input('show cards? [y/n]\n') == 'y'
+        return self.__input_hanlder('show_cards', {})
     
     def get_action(self, table, cards):
-        print(f'player {self.__name}')
-        print(f'money: {self.__money}, cards: {cards}')
-        table.print()
-        print('\n')
-
-        action_type = input('enter action [fold/check/call/raise]\n')
-        action_bet = 0
-
-        if action_type in ('call', 'raise'):
-            action_bet = int(input('enter bet size\n'))
-
-        return {
-            'type': action_type,
-            'bet': action_bet
-        }
+        return self.__input_hanlder('get_action', {
+            'table': table, 
+            'cards': cards
+        })
 
     def finish_round(self, table, cards, win_size, revealed_cards):
         self.__money += win_size
-
-        print(f'player {self.__name}')
-        print(f'money: {self.__money}, cards: {cards}, win: {win_size}, other cards: {revealed_cards}')
-        table.print()
-        print('\n')
 
     def __str__(self):
         return self.__name
